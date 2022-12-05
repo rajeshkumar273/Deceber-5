@@ -1,0 +1,55 @@
+create table category_ios(
+	ctg_id numeric primary key,
+	ctg_name varchar(15) not null unique,
+	ctg_desc varchar(100)
+);
+
+create table product_ios(
+	p_id numeric primary key,
+	p_name varchar(20) not null,
+	p_price numeric not null,
+	p_brand varchar(20) not null, 
+	p_desc varchar(100) not null,
+	ctg_id numeric references category_ios(ctg_id)
+);
+
+create table event_ios(
+	e_id numeric primary key,
+	e_name varchar(20) unique not null,
+	e_stdt date not null,
+	e_enddt date not null
+);
+
+create table coupon_ios(
+	cpn_id numeric primary key,
+	cpn_disc numeric not null,
+	e_id numeric references event_ios(e_id),
+	ctg_id numeric references category_ios(ctg_id)
+);
+
+create table customer_ios(
+	cust_id numeric primary key,
+	cust_name varchar(20) not null,
+	cust_add varchar(100) not null,
+	cust_ph numeric not null unique,
+	cust_email varchar(20) unique not null
+);
+
+create table cart_ios(
+	cart_id numeric primary key,
+	cust_id numeric references customer_ios(cust_id)
+);
+
+create table cartDetails_ios(
+	cartd_id numeric primary key,
+	quantity numeric not null,
+	cart_id numeric references cart_ios(cart_id),
+	p_id numeric references product_ios(p_id)	
+);
+
+create table payment_ios(
+	pay_id numeric primary key,
+	amount numeric not null,
+	discount numeric not null,
+	cart_id numeric references cart_ios(cart_id)
+);
